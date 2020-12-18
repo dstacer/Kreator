@@ -1,13 +1,18 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "glm.hpp"
+#include "gtc/matrix_transform.hpp"
 
 #include <iostream>
 
 #include "Renderer.h"
 #include "IndexBuffer.h"
 #include "VertexBuffer.h"
+#include "VertexBufferLayout.h"
 #include "VertexArray.h"
 #include "Shader.h"
+#include "Texture.h"
+#include "TestApp.h"
 
 
 int main(void)
@@ -23,7 +28,7 @@ int main(void)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Hello World", NULL, NULL);
+    window = glfwCreateWindow(640, 480, "Kreator", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -47,11 +52,11 @@ int main(void)
         << std::endl;
     
     {
-        float positions[8] = {
-            -0.5, -0.5,
-             0.5, -0.5,
-             0.5,  0.5,
-            -0.5,  0.5,
+        float verts[] = {
+            -0.6, -0.25, 0.0, 0.0,
+             0.6, -0.25, 1.0, 0.0,
+             0.6,  0.25, 1.0, 1.0,
+            -0.6,  0.25, 0.0, 1.0
         };
 
         unsigned int indices[6] = {
@@ -60,24 +65,31 @@ int main(void)
         };
 
         VertexArray va;
-        VertexBuffer vbuf(positions, 4 * 2 * sizeof(float));
+        VertexBuffer vbuf(verts, 4 * 4 * sizeof(float));
         
         VertexBufferLayout vblayout;
         vblayout.Push<float>(2);
-        
+        vblayout.Push<float>(2);
         va.AddBuffer(vbuf, vblayout);
 
         IndexBuffer ibuf(indices, 6);
         ibuf.Bind();
 
+        glm::mat4 proj = glm::ortho(-1.6f, 1.6f, -1.2f, 1.2f, -1.0f, 1.0f);
         Shader shaderProgram("resources/shaders/VertexAndFrag.glsl");
         shaderProgram.Bind();
-        shaderProgram.SetUniform4f("u_color", 0.2f, 0.2f, 0.8f, 1.0f);
+        shaderProgram.SetUniform4f("u_Color", 0.2f, 0.2f, 0.8f, 1.0f);
+        shaderProgram.SetUniform1i("u_TexSlot", 0);
+        shaderProgram.SetUniformMat4f("u_MVP", proj);
+        
+        Texture tex("resources/textures/Kreator.png");
+        tex.Bind();
         
         va.Unbind();
         shaderProgram.Unbind();
         vbuf.Unbind();
         ibuf.Unbind(); 
+        Renderer rend;
 
         float r = 0.0f;
         float increment = 0.05f;
@@ -85,14 +97,14 @@ int main(void)
         while (!glfwWindowShouldClose(window))
         {
             /* Render here */
-            GlApiCall(glClear(GL_COLOR_BUFFER_BIT));
+            rend.Clear();
 
             shaderProgram.Bind();
-            shaderProgram.SetUniform4f("u_color", r, 0.2f, 0.8f, 1.0f);
+            shaderProgram.SetUniform4f("u_Color", r, 0.2f, 0.8f, 1.0f);
 
             va.Bind();
             ibuf.Bind();
-            GlApiCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+            rend.Draw(va, ibuf, shaderProgram);
 
             if (r > 1.0f)
                 increment = -0.05f;

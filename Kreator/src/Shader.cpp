@@ -7,6 +7,8 @@
 #include <map>
 
 #include <GL/glew.h>
+#include "gtc/matrix_transform.hpp"
+#include "gtc/type_ptr.hpp"
 
 #include "Renderer.h"
 #include "Shader.h"
@@ -32,10 +34,28 @@ void Shader::Unbind() const
     GlApiCall(glUseProgram(0));
 }
 
+void Shader::SetUniformMat4f(const std::string& name, const glm::mat4& matrix)
+{
+    GLint loc = GetUniformLocation(name);
+    GlApiCall(glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(matrix)));
+}
+
 void Shader::SetUniform4f(const std::string& name, float f1, float f2, float f3, float f4)
 {
     GLint loc = GetUniformLocation(name); 
     GlApiCall(glUniform4f(loc, f1, f2, f3, f4));
+}
+
+void Shader::SetUniform1f(const std::string& name, float f1)
+{
+    GLint loc = GetUniformLocation(name);
+    GlApiCall(glUniform1f(loc, f1));
+}
+
+void Shader::SetUniform1i(const std::string& name, unsigned int val)
+{
+    GLint loc = GetUniformLocation(name);
+    GlApiCall(glUniform1i(loc, val));
 }
 
 const int Shader::GetUniformLocation(const std::string& name)

@@ -4,6 +4,10 @@
 #include <map>
 #include <unordered_map>
 
+#include "glm.hpp"
+
+#include "Renderer.h"
+
 enum class ShaderType
 {
 	NONE = -1,
@@ -32,7 +36,10 @@ public:
 	void Bind() const;
 	void Unbind() const;
 
+	void SetUniformMat4f(const std::string& name, const glm::mat4& matrix);
 	void SetUniform4f(const std::string& name, float f1, float f2, float f3, float f4);
+	void SetUniform1f(const std::string& name, float f1);
+	void SetUniform1i(const std::string& name, unsigned int val);
 
 private:
 	const int GetUniformLocation(const std::string& name);
