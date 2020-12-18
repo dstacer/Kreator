@@ -9,8 +9,11 @@
 #include <vector>
 #include <map>
 
-#define ASSERT(x) if (!(x)) __debugbreak();
-#define GlApiCall(x) ClearGlErrors(); x; ASSERT(LogGlErrors(__FILE__, #x, __LINE__))
+#include "Renderer.h"
+
+#include "IndexBuffer.h"
+#include "VertexBuffer.h"
+#include "VertexArray.h"
 
 enum class ShaderType
 {
@@ -26,22 +29,6 @@ std::map<ShaderType, GLenum> shaderTypeMap = {
     {ShaderType::FRAGMENT, GL_FRAGMENT_SHADER},
     {ShaderType::GEOMETRY, GL_GEOMETRY_SHADER} 
 };
-
-static void ClearGlErrors()
-{
-    while (glGetError() != GL_NO_ERROR);
-}
-
-static bool LogGlErrors(const char* file, const char* function, int line)
-{
-    while (GLenum err = glGetError())
-    {
-        std::cout << "OPENGL ERROR: (0x" << std::hex << err << ") in " 
-                  << function << " " << file << ": " << std::dec << line << std::endl;
-        return false;
-    }
-    return true;
-}
 
 // This function expects a file with exactly 2 shaders: Vertex and Fragment
 static std::tuple<std::string, std::string> ParseShader(const std::string& srcPath)
@@ -210,80 +197,82 @@ int main(void)
     std::cout << glGetString(GL_VENDOR) << " " << glGetString(GL_RENDERER) << " "
         << glGetString(GL_VERSION) << " " << glGetString(GL_SHADING_LANGUAGE_VERSION)
         << std::endl;
-
-    float positions[8] = {
-        -0.5, -0.5,
-         0.5, -0.5,
-         0.5,  0.5,
-        -0.5,  0.5,
-    };
-
-    unsigned int indices[6] = {
-        0, 1, 2,
-        2, 3, 0
-    };
-
-    unsigned int vertexArray;
-    GlApiCall(glGenVertexArrays(1, &vertexArray));
-    GlApiCall(glBindVertexArray(vertexArray));
-
-    unsigned int vertexbuffer;
-    GlApiCall(glGenBuffers(1, &vertexbuffer));
-    GlApiCall(glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer));
-    GlApiCall(glBufferData(GL_ARRAY_BUFFER, 4 * 2 * sizeof(float), positions, GL_STATIC_DRAW));
-
-    unsigned int indexbuffer;
-    GlApiCall(glGenBuffers(1, &indexbuffer));
-    GlApiCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexbuffer));
-    GlApiCall(glBufferData(GL_ELEMENT_ARRAY_BUFFER, 6 * sizeof(unsigned int), indices, GL_STATIC_DRAW));
-
-    GlApiCall(glEnableVertexAttribArray(0));
-    GlApiCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr));
-
-    //auto [vertSrc, fragSrc] = ParseShader("resources/shaders/VertexAndFrag.glsl");
-
-    GLuint currProg = CreateShaderProgram( ParseShaders("resources/shaders/VertexAndFrag.glsl") );
-    GlApiCall(glUseProgram(currProg));
-
-    GLint loc = glGetUniformLocation(currProg, "u_color");
-    GlApiCall(glUniform4f(loc, 0.2f, 0.2f, 0.8f, 1.0f));
-
-    GlApiCall(glUseProgram(0));
-    GlApiCall(glBindVertexArray(0));
-    GlApiCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
-    GlApiCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
-
-    float r = 0.0f;
-    float increment = 0.05f;
-    /* Loop until the user closes the window */
-    while (!glfwWindowShouldClose(window))
+    
     {
-        /* Render here */
-        GlApiCall(glClear(GL_COLOR_BUFFER_BIT));
+        float positions[8] = {
+            -0.5, -0.5,
+             0.5, -0.5,
+             0.5,  0.5,
+            -0.5,  0.5,
+        };
 
+        unsigned int indices[6] = {
+            0, 1, 2,
+            2, 3, 0
+        };
+
+        /*unsigned int vertexArray;
+        GlApiCall(glGenVertexArrays(1, &vertexArray));
+        GlApiCall(glBindVertexArray(vertexArray));*/
+
+        VertexArray va;
+        VertexBuffer vbuf(positions, 4 * 2 * sizeof(float));
+        
+        VertexBufferLayout vblayout;
+        vblayout.Push<float>(2);
+        
+        va.AddBuffer(vbuf, vblayout);
+
+        IndexBuffer ibuf(indices, 6);
+        ibuf.Bind();
+
+        GlApiCall(glEnableVertexAttribArray(0));
+        GlApiCall(glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), nullptr));
+
+        //auto [vertSrc, fragSrc] = ParseShader("resources/shaders/VertexAndFrag.glsl");
+
+        GLuint currProg = CreateShaderProgram(ParseShaders("resources/shaders/VertexAndFrag.glsl"));
         GlApiCall(glUseProgram(currProg));
-        GlApiCall(glUniform4f(loc, r, 0.2f, 0.8f, 1.0f));
 
-        GlApiCall(glBindVertexArray(vertexArray));
-        GlApiCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexbuffer));
-        GlApiCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+        GLint loc = glGetUniformLocation(currProg, "u_color");
+        GlApiCall(glUniform4f(loc, 0.2f, 0.2f, 0.8f, 1.0f));
 
-        if (r > 1.0f)
-            increment = -0.05f;
-        else if (r < 0.0f)
-            increment = 0.05f;
+        GlApiCall(glUseProgram(0));
+        GlApiCall(glBindVertexArray(0));
+        GlApiCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+        GlApiCall(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 
-        r += increment;
+        float r = 0.0f;
+        float increment = 0.05f;
+        /* Loop until the user closes the window */
+        while (!glfwWindowShouldClose(window))
+        {
+            /* Render here */
+            GlApiCall(glClear(GL_COLOR_BUFFER_BIT));
 
-        /* Swap front and back buffers */
-        glfwSwapBuffers(window);
+            GlApiCall(glUseProgram(currProg));
+            GlApiCall(glUniform4f(loc, r, 0.2f, 0.8f, 1.0f));
 
-        /* Poll for and process events */
-        glfwPollEvents();
+            va.Bind();// GlApiCall(glBindVertexArray(vertexArray));
+            ibuf.Bind();
+            GlApiCall(glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr));
+
+            if (r > 1.0f)
+                increment = -0.05f;
+            else if (r < 0.0f)
+                increment = 0.05f;
+
+            r += increment;
+
+            /* Swap front and back buffers */
+            glfwSwapBuffers(window);
+
+            /* Poll for and process events */
+            glfwPollEvents();
+        }
+
+        GlApiCall(glDeleteProgram(currProg));
     }
-
-    GlApiCall(glDeleteProgram(currProg));
-
     glfwTerminate();
     return 0;
 }
