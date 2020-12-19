@@ -2,6 +2,9 @@
 #include <GLFW/glfw3.h>
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_opengl3.h"
+#include "imgui/imgui_impl_glfw.h"
 
 #include <iostream>
 
@@ -77,14 +80,12 @@ int main(void)
 
         glm::mat4 proj = glm::ortho(-1.6f, 1.6f, -1.2f, 1.2f, -1.0f, 1.0f);
         glm::mat4 view = glm::mat4(1.0);
-        glm::mat4 model = glm::scale(glm::mat4(1.0), { 2.0, 2.0f, 2.0f });
-        glm::mat4 mvp = proj * view * model;
+        glm::vec3 translation(0.0, 0.0f, 0.0f);
 
         Shader shaderProgram("resources/shaders/VertexAndFrag.glsl");
         shaderProgram.Bind();
         shaderProgram.SetUniform4f("u_Color", 0.2f, 0.2f, 0.8f, 1.0f);
         shaderProgram.SetUniform1i("u_TexSlot", 0);
-        shaderProgram.SetUniformMat4f("u_MVP", mvp);
         
         Texture tex("resources/textures/Kreator.png");
         tex.Bind();
@@ -95,16 +96,31 @@ int main(void)
         ibuf.Unbind(); 
         Renderer rend;
 
+        ImGui::CreateContext();
+        ImGui::StyleColorsDark();
+        ImGui_ImplGlfw_InitForOpenGL(window, true);
+        ImGui_ImplOpenGL3_Init("#version 130");
+
         float r = 0.0f;
         float increment = 0.05f;
+        ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
         /* Loop until the user closes the window */
         while (!glfwWindowShouldClose(window))
         {
             /* Render here */
+            glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
             rend.Clear();
 
+            ImGui_ImplOpenGL3_NewFrame();
+            ImGui_ImplGlfw_NewFrame();
+            ImGui::NewFrame();
+
+            glm::mat4 model = glm::translate(glm::mat4(1.0), translation);
+            glm::mat4 mvp = proj * view * model;
             shaderProgram.Bind();
             shaderProgram.SetUniform4f("u_Color", r, 0.2f, 0.8f, 1.0f);
+            shaderProgram.SetUniformMat4f("u_MVP", mvp);
+
 
             va.Bind();
             ibuf.Bind();
@@ -116,6 +132,28 @@ int main(void)
                 increment = 0.05f;
 
             r += increment;
+            // Our state
+            bool show_demo_window = true;
+            bool show_another_window = false;
+            
+
+            // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
+            {
+                static float f = 0.0f;
+
+                ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+
+                ImGui::SliderFloat3("float", &translation.x, -1.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
+                ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+
+                ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+                ImGui::End();
+            }
+
+
+            ImGui::Render();
+            
+            ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
             /* Swap front and back buffers */
             glfwSwapBuffers(window);
@@ -124,6 +162,10 @@ int main(void)
             glfwPollEvents();
         }
     }
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
     glfwTerminate();
     return 0;
 }
