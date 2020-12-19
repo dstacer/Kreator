@@ -1,7 +1,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
-#include "glm.hpp"
-#include "gtc/matrix_transform.hpp"
+#include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
 
 #include <iostream>
 
@@ -53,10 +53,10 @@ int main(void)
     
     {
         float verts[] = {
-            -0.6, -0.25, 0.0, 0.0,
-             0.6, -0.25, 1.0, 0.0,
-             0.6,  0.25, 1.0, 1.0,
-            -0.6,  0.25, 0.0, 1.0
+            -0.6f, -0.25f, 0.0f, 0.0f,
+             0.6f, -0.25f, 1.0f, 0.0f,
+             0.6f,  0.25f, 1.0f, 1.0f,
+            -0.6f,  0.25f, 0.0f, 1.0f
         };
 
         unsigned int indices[6] = {
@@ -76,11 +76,15 @@ int main(void)
         ibuf.Bind();
 
         glm::mat4 proj = glm::ortho(-1.6f, 1.6f, -1.2f, 1.2f, -1.0f, 1.0f);
+        glm::mat4 view = glm::mat4(1.0);
+        glm::mat4 model = glm::scale(glm::mat4(1.0), { 2.0, 2.0f, 2.0f });
+        glm::mat4 mvp = proj * view * model;
+
         Shader shaderProgram("resources/shaders/VertexAndFrag.glsl");
         shaderProgram.Bind();
         shaderProgram.SetUniform4f("u_Color", 0.2f, 0.2f, 0.8f, 1.0f);
         shaderProgram.SetUniform1i("u_TexSlot", 0);
-        shaderProgram.SetUniformMat4f("u_MVP", proj);
+        shaderProgram.SetUniformMat4f("u_MVP", mvp);
         
         Texture tex("resources/textures/Kreator.png");
         tex.Bind();
