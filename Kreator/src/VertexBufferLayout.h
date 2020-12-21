@@ -31,25 +31,22 @@ public:
 	template<> 
 	void Push<float>(unsigned int count)
 	{
-		unsigned int size = count * sizeof(GLfloat);
-		m_Elements.push_back( { count, GL_FLOAT, GL_FALSE, size } );
-		m_Stride += size;
+		m_Elements.push_back( { count, GL_FLOAT, GL_FALSE, m_Stride } );
+		m_Stride += count * sizeof(GLfloat);
 	}
 
 	template<>
 	void Push<unsigned int>(unsigned int count)
 	{
-		unsigned int size = count * sizeof(GLuint);
-		m_Elements.push_back( { count, GL_UNSIGNED_INT, GL_FALSE, size } );
-		m_Stride += size;
+		m_Elements.push_back( { count, GL_UNSIGNED_INT, GL_FALSE, m_Stride } );
+		m_Stride += count * sizeof(GLuint);
 	}
 
 	template<>
 	void Push<unsigned char>(unsigned int count)
 	{
-		unsigned int size = count * sizeof(GLubyte);
-		m_Elements.push_back( { count, GL_UNSIGNED_BYTE, GL_TRUE } );
-		m_Stride += size;
+		m_Elements.push_back( { count, GL_UNSIGNED_BYTE, GL_TRUE, m_Stride } );
+		m_Stride += count * sizeof(GLubyte);
 	}
 
 	const unsigned int GetStride() const { return m_Stride; }

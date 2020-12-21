@@ -1,18 +1,16 @@
 #pragma once
 
-#include "glm/glm.hpp"
 #include "Test.h"
 
 namespace test 
 {
-	class TestClearColor : public Test
+	class TestFlatColor : public Test
 	{
 	private:
-		glm::vec4 m_ClearColor;
-		
+
 	public:
-		TestClearColor();
-		virtual ~TestClearColor();
+		TestFlatColor();
+		virtual ~TestFlatColor();
 
 		virtual void OnUpdate(float delta) override;
 		virtual void OnRender() override;

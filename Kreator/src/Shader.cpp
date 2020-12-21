@@ -40,10 +40,28 @@ void Shader::SetUniformMat4f(const std::string& name, const glm::mat4& matrix)
     GlApiCall(glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(matrix)));
 }
 
+void Shader::SetUniformMat3f(const std::string& name, const glm::mat3& matrix)
+{
+    GLint loc = GetUniformLocation(name);
+    GlApiCall(glUniformMatrix3fv(loc, 1, GL_FALSE, glm::value_ptr(matrix)));
+}
+
 void Shader::SetUniform4f(const std::string& name, float f1, float f2, float f3, float f4)
 {
     GLint loc = GetUniformLocation(name); 
     GlApiCall(glUniform4f(loc, f1, f2, f3, f4));
+}
+
+void Shader::SetUniform3f(const std::string& name, float f1, float f2, float f3)
+{
+    GLint loc = GetUniformLocation(name);
+    GlApiCall(glUniform3f(loc, f1, f2, f3));
+}
+
+void Shader::SetUniform2f(const std::string& name, float f1, float f2)
+{
+    GLint loc = GetUniformLocation(name);
+    GlApiCall(glUniform2f(loc, f1, f2));
 }
 
 void Shader::SetUniform1f(const std::string& name, float f1)

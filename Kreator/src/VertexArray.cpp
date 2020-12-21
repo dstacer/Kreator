@@ -19,14 +19,12 @@ void VertexArray::AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& vb
 	vb.Bind();
 
 	const auto& elements = vblayout.GetElements();
-	unsigned int offset = 0;
 	for (unsigned int i = 0; i < elements.size(); i++)
 	{
 		const auto& element = elements[i];
 		GlApiCall(glEnableVertexAttribArray(i));
 		GlApiCall(glVertexAttribPointer(i, element.count, element.type, element.normalized,
-			vblayout.GetStride(), (const void *)offset));
-		offset += element.offset;
+										vblayout.GetStride(), (const void*)element.offset));
 	}
 	
 }

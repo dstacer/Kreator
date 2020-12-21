@@ -66,11 +66,22 @@
     <ClCompile Include="src\tests\TestClearColor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\tests\TestFlatColor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tests\TestTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tests\TestTransform.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tests\Test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shaders\NoProjVertex.glsl" />
     <None Include="resources\shaders\RedFrag.glsl" />
-    <None Include="resources\shaders\VertexAndFrag.glsl" />
     <None Include="src\thirdparty\glm\detail\func_common.inl">
       <Filter>Header Files</Filter>
     </None>
@@ -479,6 +490,9 @@
     <None Include="src\thirdparty\glm\gtx\wrap.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="resources\shaders\VFAttribColor.glsl" />
+    <None Include="resources\shaders\VFUniColorMVP.glsl" />
+    <None Include="resources\shaders\VFUniTexMVP.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Renderer.h">
@@ -1382,6 +1396,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\tests\TestClearColor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\TestFlatColor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\TestTexture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\TestTransform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
