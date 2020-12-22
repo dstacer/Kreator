@@ -50,7 +50,7 @@ namespace test
 	{
 		Renderer rend;
 		/* Render here */
-		rend.SetClearColor({ 0.2f, 0.8f, 0.2f, 1.0f });
+		rend.SetClearColor({ 0.8f, 0.8f, 0.8f, 1.0f });
 		rend.Clear();
 
 		m_Texture->Bind();

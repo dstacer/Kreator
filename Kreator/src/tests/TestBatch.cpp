@@ -81,7 +81,7 @@ namespace test
 		{
 			for (int y = -1; y < 2; y++) 
 			{
-				vertBuffer = m_Vao->CreateQuad(vertBuffer, { -0.3f + 1.2f*x, 0.75f*y }, { 1.2f, 0.5f }, currQuad++ % 2);
+				vertBuffer = m_Vao->CreateQuad(vertBuffer, { -0.3f + 1.2f*x, 0.75f*y }, { 1.2f, 0.5f }, currQuad++ % 3);
 				indexCount += 6;
 			}
 		}

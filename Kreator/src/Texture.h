@@ -13,7 +13,9 @@ private:
 	int m_Width, m_Height, m_Channels;
 
 public:
+	Texture(uint32_t width, uint32_t height, void* data);
 	Texture(const std::string& filepath);
+	
 	~Texture();
 
 	void Bind(unsigned int texSlot = 0) const;
@@ -22,4 +24,5 @@ public:
 
 	int GetWidth() const { return m_Width; }
 	int GetHeight() const { return m_Height; }
+	void SetData(void* data, uint32_t size);
 };

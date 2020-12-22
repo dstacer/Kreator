@@ -33,5 +33,5 @@ uniform sampler2DArray u_TexUnit;
 void main()
 {
     vec4 texColor = texture(u_TexUnit, vec3(v_TexCoords, v_TexSlot));
-    color = texColor;
+    color = texColor * v_Color;
 }

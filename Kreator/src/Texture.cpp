@@ -2,6 +2,26 @@
 
 #include "Texture.h"
 
+Texture::Texture(uint32_t width, uint32_t height, void* data)
+	: m_RendererId(0),
+	  m_Filepath(""),
+	  m_Buffer(nullptr),
+	  m_Width(width),
+	  m_Height(height),
+	  m_Channels(0)
+{
+	GlApiCall(glGenTextures(1, &m_RendererId));
+	Bind();
+
+	GlApiCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
+	GlApiCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+	GlApiCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+	GlApiCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
+
+	GlApiCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data));
+	Unbind();
+}
+
 Texture::Texture(const std::string& filepath)
 	: m_RendererId(0),
 	  m_Filepath(filepath),
@@ -19,9 +39,9 @@ Texture::Texture(const std::string& filepath)
 	Bind();
 
 	GlApiCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR));
-	GlApiCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
-	GlApiCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP));
-	GlApiCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP));
+	GlApiCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST));
+	GlApiCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
+	GlApiCall(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
 
 	GlApiCall(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, m_Width, m_Height, 0, GL_RGBA, GL_UNSIGNED_BYTE, m_Buffer));
 	Unbind();
@@ -49,4 +69,9 @@ void Texture::BindUnit(unsigned int texSlot) const
 void Texture::Unbind() const
 {
 	GlApiCall(glBindTexture(GL_TEXTURE_2D, 0));
+}
+
+void Texture::SetData(void* data, uint32_t size)
+{
+
 }
