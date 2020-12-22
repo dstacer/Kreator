@@ -2,7 +2,6 @@
 
 #include <GL/glew.h>
 #include "glm/glm.hpp"
-#include "Shader.h"
 
 class VertexArray;
 class IndexBuffer;
@@ -13,6 +12,14 @@ class Shader;
 
 void ClearGlErrors();
 bool LogGlErrors(const char* file, const char* function, int line);
+
+struct Vertex
+{
+	float Position[3];
+	float Color[4];
+	float TexCoords[2];
+	float TexUnit;
+};
 
 class Renderer
 {	

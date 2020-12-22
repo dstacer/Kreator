@@ -1,23 +1,24 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include "Renderer.h"
 
-class Texture
+class TextureArray
 {
 private:
 	unsigned int m_RendererId;
-	std::string m_Filepath;
-	unsigned char* m_Buffer;
+	std::vector<std::string> m_Filepaths;
+	unsigned char* m_Buffers[16];
 	int m_Width, m_Height, m_Channels;
+	int m_Layers;
 
 public:
-	Texture(const std::string& filepath);
-	~Texture();
+	TextureArray(std::vector<std::string> filepaths);
+	~TextureArray();
 
 	void Bind(unsigned int texSlot = 0) const;
-	void BindUnit(unsigned int texSlot) const;
 	void Unbind() const;
 
 	int GetWidth() const { return m_Width; }

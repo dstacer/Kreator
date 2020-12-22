@@ -41,6 +41,11 @@ void Texture::Bind(unsigned int texSlot) const
 	GlApiCall(glBindTexture(GL_TEXTURE_2D, m_RendererId));
 }
 
+void Texture::BindUnit(unsigned int texSlot) const
+{
+	GlApiCall(glBindTextureUnit(texSlot, m_RendererId));
+}
+
 void Texture::Unbind() const
 {
 	GlApiCall(glBindTexture(GL_TEXTURE_2D, 0));

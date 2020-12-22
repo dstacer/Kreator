@@ -76,6 +76,12 @@ void Shader::SetUniform1i(const std::string& name, unsigned int val)
     GlApiCall(glUniform1i(loc, val));
 }
 
+void Shader::SetUniform1iv(const std::string& name, unsigned int size, int* vals)
+{
+    GLint loc = GetUniformLocation(name);
+    GlApiCall(glUniform1iv(loc, size, vals));
+}
+
 const int Shader::GetUniformLocation(const std::string& name)
 {
     if (m_UniformLocCache.find(name) != m_UniformLocCache.end())

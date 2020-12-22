@@ -43,6 +43,7 @@ public:
 	void SetUniform2f(const std::string& name, float f1, float f2);
 	void SetUniform1f(const std::string& name, float f1);
 	void SetUniform1i(const std::string& name, unsigned int val);
+	void SetUniform1iv(const std::string& name, unsigned int size, int* vals);
 
 private:
 	const int GetUniformLocation(const std::string& name);

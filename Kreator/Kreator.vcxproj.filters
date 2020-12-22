@@ -78,6 +78,12 @@
     <ClCompile Include="src\tests\Test.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\tests\TestBatch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TextureArray.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shaders\NoProjVertex.glsl" />
@@ -493,6 +499,7 @@
     <None Include="resources\shaders\VFAttribColor.glsl" />
     <None Include="resources\shaders\VFUniColorMVP.glsl" />
     <None Include="resources\shaders\VFUniTexMVP.glsl" />
+    <None Include="resources\shaders\VFBatch.glsl" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Renderer.h">
@@ -1407,9 +1414,18 @@
     <ClInclude Include="src\tests\TestTransform.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\tests\TestBatch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TextureArray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\Kreator.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\textures\KreatorBW.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

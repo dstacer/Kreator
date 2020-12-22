@@ -15,6 +15,7 @@
 #include "tests/TestTexture.h"
 #include "tests/TestTransform.h"
 #include "tests/TestFlatColor.h"
+#include "tests/TestBatch.h"
 #include "TestApp.h"
 
 
@@ -62,6 +63,7 @@ int main(void)
         testMenu->AddTest<test::TestTexture>("Test Texture");
         testMenu->AddTest<test::TestTransform>("Test Transform");
         testMenu->AddTest<test::TestFlatColor>("Test Flat Color");
+        testMenu->AddTest<test::TestBatch>("Test Batch");
 
         ImGui::CreateContext();
         ImGui::StyleColorsDark();
