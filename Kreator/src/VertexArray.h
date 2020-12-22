@@ -1,7 +1,10 @@
 #pragma once
+#include <array>
 
 class VertexBuffer;
 class VertexBufferLayout;
+struct Vertex;
+struct Vec2;
 
 class VertexArray
 {
@@ -13,7 +16,10 @@ public:
 	~VertexArray();
 
 	void AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& vblayout);
+    Vertex * CreateQuad(Vertex * target, Vec2 pos, Vec2 size, float texId);
 
 	void Bind() const;
 	void Unbind() const;
 };
+
+

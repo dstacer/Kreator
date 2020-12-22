@@ -3,6 +3,12 @@
 #include "VertexBuffer.h"
 
 
+VertexBuffer::VertexBuffer()
+{
+    GlApiCall(glGenBuffers(1, &m_RendererId));
+    GlApiCall(glBindBuffer(GL_ARRAY_BUFFER, m_RendererId));
+    GlApiCall(glBufferData(GL_ARRAY_BUFFER, Render::MAX_VERTS*sizeof(Vertex), nullptr, GL_DYNAMIC_DRAW));
+}
 VertexBuffer::VertexBuffer(void* data, unsigned int size)
 {
     GlApiCall(glGenBuffers(1, &m_RendererId));
@@ -23,4 +29,9 @@ void VertexBuffer::Bind() const
 void VertexBuffer::Unbind() const
 {
     GlApiCall(glBindBuffer(GL_ARRAY_BUFFER, 0));
+}
+
+void VertexBuffer::Fill(const void* data, unsigned int size)
+{
+    GlApiCall(glBufferSubData(GL_ARRAY_BUFFER, 0, size, data));
 }

@@ -5,37 +5,42 @@ namespace test
 {
 
 	TestBatch::TestBatch()
-	{
-		float verts[] = {
-			-0.6f, -0.75f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f,
-			 0.6f, -0.75f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-			 0.6f, -0.25f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-			-0.6f, -0.25f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f,
-			-0.6f,  0.25f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-			 0.6f,  0.25f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-			 0.6f,  0.75f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-			-0.6f,  0.75f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f
-		};									
+	{						
+		unsigned int indices[Render::MAX_INDICES];
+		unsigned int offset = 0;
+		for (unsigned int i = 0; i < Render::MAX_INDICES; i+=6) 
+		{
+			/*
+				3-----2
+				|    /|
+				|   / | 
+				|  /  |
+				| /   |
+				0-----1
+			*/
+			indices[i + 0] = 0 + offset;
+			indices[i + 1] = 1 + offset;
+			indices[i + 2] = 2 + offset;
+			indices[i + 3] = 2 + offset;
+			indices[i + 4] = 3 + offset;
+			indices[i + 5] = 0 + offset;
 
-		unsigned int indices[12] = {
-			0, 1, 2,
-			2, 3, 0,
-			4, 5, 6,
-			6, 7, 4
-		};
+			// 4 verts, 6 indices per quad -> increment offset by 4 after every 6 indices
+			offset += 4;
+		}
 
 		m_Vao = std::make_unique<VertexArray>();
-		m_Vbo = std::make_unique<VertexBuffer>(verts, 8 * 9 * sizeof(float));
+		m_Vbo = std::make_unique<VertexBuffer>();
 
 		VertexBufferLayout vblayout;
-		vblayout.Push<float>(2);
+		vblayout.Push<float>(3);
 		vblayout.Push<float>(4); 
 		vblayout.Push<float>(2);
 		vblayout.Push<float>(1);
 
 		m_Vao->AddBuffer(*m_Vbo, vblayout);
 
-		m_Ibo = std::make_unique<IndexBuffer>(indices, 12); 
+		m_Ibo = std::make_unique<IndexBuffer>(indices, Render::MAX_INDICES); 
 		m_Ibo->Bind();
 
 		std::vector<std::string> filepaths{ "resources/textures/Kreator.png",
@@ -67,11 +72,26 @@ namespace test
 	void TestBatch::OnRender()
 	{
 		Renderer rend;
+
+		std::array<Vertex, 36> vertices;
+		Vertex* vertBuffer = vertices.data();
+		int currQuad = 0;
+		unsigned int indexCount = 0;
+		for (int x = -1; x < 2; x++)
+		{
+			for (int y = -1; y < 2; y++) 
+			{
+				vertBuffer = m_Vao->CreateQuad(vertBuffer, { -0.3f + 1.2f*x, 0.75f*y }, { 1.2f, 0.5f }, currQuad++ % 2);
+				indexCount += 6;
+			}
+		}
+
+		m_Vbo->Fill(vertices.data(), vertices.size()*sizeof(Vertex));
 		
-		rend.SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
+		rend.SetClearColor({ 0.4f, 0.4f, 0.4f, 1.0f });
 		rend.Clear();
 
-		rend.Draw(*m_Vao, *m_Ibo, *m_Shader);
+		rend.Draw(*m_Vao, *m_Ibo, *m_Shader, indexCount);
 	}
 
 	void TestBatch::OnImguiRender()

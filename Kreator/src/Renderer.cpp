@@ -31,14 +31,15 @@ Renderer::~Renderer()
 {
 }
 
-void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const
+void Renderer::Draw(const VertexArray& va, const IndexBuffer& ib, 
+                    const Shader& shader, const unsigned int count) const
 {
     shader.Bind();
-    //shaderProgram.SetUniform4f("u_color", r, 0.2f, 0.8f, 1.0f);
 
     va.Bind();
     ib.Bind();
-    GlApiCall(glDrawElements(GL_TRIANGLES, ib.GetCount(), GL_UNSIGNED_INT, nullptr));
+    unsigned int indexCount = count == 0 ? ib.GetCount() : count;
+    GlApiCall(glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr));
 }
 
 void Renderer::Clear() const

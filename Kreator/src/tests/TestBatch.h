@@ -10,8 +10,6 @@ namespace test
 	{
 	private:
 		std::unique_ptr<TextureArray> m_Texture;
-		//std::unique_ptr<Texture> m_Texture2;
-		
 		
 	public:
 		TestBatch();
