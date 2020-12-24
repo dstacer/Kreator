@@ -16,7 +16,7 @@ class Shader;
 void ClearGlErrors();
 bool LogGlErrors(const char* file, const char* function, int line);
 
-const size_t MAX_QUADS(9);
+const size_t MAX_QUADS(10000);
 const size_t MAX_VERTS(4 * MAX_QUADS);
 const size_t MAX_INDICES(6 * MAX_QUADS);
 const size_t MAX_TEXTURES(32);

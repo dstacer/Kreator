@@ -24,12 +24,12 @@ namespace test
 		BatchRenderer::BeginBatch();
 		
 		int currQuad = 0;
-		for (int x = -1; x < 2; x++)
+		for (float y = -330.f; y < 330.f; y+=10.f)
 		{
-			for (int y = -1; y < 2; y++) 
+			for (float x = -600.f; x < 600.f; x+=10.f) 
 			{
-				BatchRenderer::AddQuad({ -0.3f + 1.2f*x, 0.75f*y, 0.0f}, { 1.2f, 0.5f }, 
-					{ 1.0f, 1.0f, 1.0f, 1.0f }, currQuad++ % 3);
+				glm::vec4 color = { (x + 600) / 1200.f, 0.2f, (y + 300) / 600.f, 1.0f };
+				BatchRenderer::AddQuad({ x, y, 0.0f}, { 9.f, 9.f }, color, 0);
 			}
 		}
 

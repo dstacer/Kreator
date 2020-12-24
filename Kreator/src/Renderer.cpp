@@ -225,7 +225,7 @@ void RenderData::Init()
 	tex->Bind(0);
 	shader->Bind();
 
-	glm::mat4 proj = glm::ortho(-1.778f, 1.778f, -0.9f, 0.9f, -1.0f, 1.0f);
+	glm::mat4 proj = glm::ortho(-600.f, 600.f, -337.f, 337.f, -1.0f, 1.0f);
 	glm::mat4 view = glm::mat4(1.0);
 	glm::mat4 mvp = proj * view;
 
