@@ -2,7 +2,7 @@
 
 #include "TextureArray.h"
 
-TextureArray::TextureArray(std::vector<std::string> filepaths)
+TextureArray::TextureArray(const std::vector<std::string> filepaths)
 	: m_RendererId(0),
 	m_Filepaths(filepaths),
 	m_Width(0),

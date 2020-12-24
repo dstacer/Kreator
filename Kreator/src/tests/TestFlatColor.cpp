@@ -36,7 +36,7 @@ namespace test
 		m_Shader = std::make_unique<Shader>("resources/shaders/VFAttribColor.glsl");
 		m_Shader->Bind();
 
-		glm::mat4 proj = glm::ortho(-1.6f, 1.6f, -1.2f, 1.2f, -1.0f, 1.0f);
+		glm::mat4 proj = glm::ortho(-1.778f, 1.778f, -0.9f, 0.9f, -1.0f, 1.0f);
 		glm::mat4 view = glm::mat4(1.0);
 		glm::mat4 mvp = proj * view;
 

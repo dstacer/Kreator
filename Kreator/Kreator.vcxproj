@@ -163,6 +163,7 @@
     <ClCompile Include="src\tests\TestBatch.cpp" />
     <ClCompile Include="src\tests\TestClearColor.cpp" />
     <ClCompile Include="src\tests\TestFlatColor.cpp" />
+    <ClCompile Include="src\tests\TestStaticBatch.cpp" />
     <ClCompile Include="src\tests\TestTexture.cpp" />
     <ClCompile Include="src\tests\TestTransform.cpp" />
     <ClCompile Include="src\Texture.cpp" />
@@ -332,6 +333,7 @@
     <ClInclude Include="src\tests\TestBatch.h" />
     <ClInclude Include="src\tests\TestClearColor.h" />
     <ClInclude Include="src\tests\TestFlatColor.h" />
+    <ClInclude Include="src\tests\TestStaticBatch.h" />
     <ClInclude Include="src\tests\TestTexture.h" />
     <ClInclude Include="src\tests\TestTransform.h" />
     <ClInclude Include="src\Texture.h" />

@@ -29,30 +29,26 @@ void VertexArray::AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& vb
 	}
 }
 
-Vertex * VertexArray::CreateQuad(Vertex* target, Vec2 pos, Vec2 size, float texId)
+Vertex* VertexArray::CreateQuad(Vertex* target, glm::vec3 pos, glm::vec2 size, float texId)
 {
-	//Vertex v1;
 	target->Position = { pos.x, pos.y, 0.0f };
 	target->Color = { 1.0f, 1.0f, 1.0f, 1.0f };
 	target->TexCoords = { 0.0f, 0.0f };
 	target->TexId = texId;
 	target++;
 
-	//Vertex v2; 
 	target->Position = { pos.x + size.x, pos.y, 0.0f };
 	target->Color = { 1.0f, 0.0f, 0.0f, 1.0f };
 	target->TexCoords = { 1.0f, 0.0f };
 	target->TexId = texId;
 	target++;
 
-	//Vertex v3;
 	target->Position = { pos.x + size.x, pos.y + size.y, 0.0f };
 	target->Color = { 0.0f, 1.0f, 0.0f, 1.0f };
 	target->TexCoords = { 1.0f, 1.0f };
 	target->TexId = texId;
 	target++;
 
-	//Vertex v4;
 	target->Position = { pos.x, pos.y + size.y, 0.0f };
 	target->Color = { 0.0f, 0.0f, 1.0f, 1.0f };
 	target->TexCoords = { 0.0f, 1.0f };

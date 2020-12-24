@@ -16,6 +16,7 @@
 #include "tests/TestTransform.h"
 #include "tests/TestFlatColor.h"
 #include "tests/TestBatch.h"
+#include "tests/TestStaticBatch.h"
 #include "TestApp.h"
 
 
@@ -32,7 +33,7 @@ int main(void)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* Create a windowed mode window and its OpenGL context */
-    window = glfwCreateWindow(640, 480, "Kreator", NULL, NULL);
+    window = glfwCreateWindow(1200, 675, "Kreator", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -55,7 +56,7 @@ int main(void)
         << glGetString(GL_VERSION) << " " << glGetString(GL_SHADING_LANGUAGE_VERSION)
         << std::endl;
     
-    {
+    
         test::Test* currentTest(nullptr);
         test::TestMenu* testMenu = new test::TestMenu(currentTest);
         currentTest = testMenu;
@@ -64,6 +65,7 @@ int main(void)
         testMenu->AddTest<test::TestTransform>("Test Transform");
         testMenu->AddTest<test::TestFlatColor>("Test Flat Color");
         testMenu->AddTest<test::TestBatch>("Test Batch");
+        testMenu->AddTest<test::TestStaticBatch>("Test Static Batch");
 
         ImGui::CreateContext();
         ImGui::StyleColorsDark();
@@ -106,7 +108,7 @@ int main(void)
             /* Poll for and process events */
             glfwPollEvents();
         }
-    }
+    
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();

@@ -15,7 +15,7 @@ private:
 	int m_Layers;
 
 public:
-	TextureArray(std::vector<std::string> filepaths);
+	TextureArray(const std::vector<std::string> filepaths);
 	~TextureArray();
 
 	void Bind(unsigned int texSlot = 0) const;

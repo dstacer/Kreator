@@ -30,7 +30,7 @@ Texture::Texture(const std::string& filepath)
 	  m_Height(0),
 	  m_Channels(0)
 {
-	// data is flipped for .png.  Must set appropriate for other
+	// data is flipped for .png.  Must set appropriately for other
 	// texture formats
 	stbi_set_flip_vertically_on_load(true);
 	m_Buffer = stbi_load(filepath.c_str(), &m_Width, &m_Height, &m_Channels, 4);

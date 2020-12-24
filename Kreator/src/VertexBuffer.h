@@ -1,24 +1,6 @@
 #pragma once
 
-struct Vec4 {
-	float x, y, z, w;
-};
-
-struct Vec3 {
-	float x, y, z;
-};
-
-struct Vec2 {
-	float x, y;
-};
-
-struct Vertex
-{
-	Vec3 Position;
-	Vec4 Color;
-	Vec2 TexCoords;
-	float TexId;
-};
+#include "glm/glm.hpp"
 
 class VertexBuffer 
 {
@@ -33,6 +15,6 @@ public:
 
 	void Bind() const;
 	void Unbind() const;
-	void Fill(const void* data, unsigned int size);
+	void Fill(const void* data, unsigned int size) const;
 	
 };

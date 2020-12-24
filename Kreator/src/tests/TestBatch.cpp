@@ -1,3 +1,4 @@
+#include <array>
 #include "TextureArray.h"
 #include "TestBatch.h"
 
@@ -6,9 +7,9 @@ namespace test
 
 	TestBatch::TestBatch()
 	{						
-		unsigned int indices[Render::MAX_INDICES];
+		unsigned int indices[MAX_INDICES];
 		unsigned int offset = 0;
-		for (unsigned int i = 0; i < Render::MAX_INDICES; i+=6) 
+		for (unsigned int i = 0; i < MAX_INDICES; i+=6) 
 		{
 			/*
 				3-----2
@@ -40,7 +41,7 @@ namespace test
 
 		m_Vao->AddBuffer(*m_Vbo, vblayout);
 
-		m_Ibo = std::make_unique<IndexBuffer>(indices, Render::MAX_INDICES); 
+		m_Ibo = std::make_unique<IndexBuffer>(indices, MAX_INDICES); 
 		m_Ibo->Bind();
 
 		std::vector<std::string> filepaths{ "resources/textures/Kreator.png",
@@ -51,7 +52,7 @@ namespace test
 		m_Shader = std::make_unique<Shader>("resources/shaders/VFBatch.glsl");
 		m_Shader->Bind();
 		
-		glm::mat4 proj = glm::ortho(-1.6f, 1.6f, -1.2f, 1.2f, -1.0f, 1.0f);
+		glm::mat4 proj = glm::ortho(-1.7778f, 1.778f, -0.9f, 0.9f, -1.0f, 1.0f);
 		glm::mat4 view = glm::mat4(1.0);
 		glm::mat4 mvp = proj * view;
 
@@ -81,11 +82,11 @@ namespace test
 		{
 			for (int y = -1; y < 2; y++) 
 			{
-				vertBuffer = m_Vao->CreateQuad(vertBuffer, { -0.3f + 1.2f*x, 0.75f*y }, { 1.2f, 0.5f }, currQuad++ % 3);
+				vertBuffer = m_Vao->CreateQuad(vertBuffer, { -0.3f + 1.2f*x, 0.75f*y, 0.0f}, { 1.2f, 0.5f }, currQuad++ % 3);
 				indexCount += 6;
 			}
 		}
-
+		m_Vbo->Bind();
 		m_Vbo->Fill(vertices.data(), vertices.size()*sizeof(Vertex));
 		
 		rend.SetClearColor({ 0.4f, 0.4f, 0.4f, 1.0f });

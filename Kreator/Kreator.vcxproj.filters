@@ -84,6 +84,9 @@
     <ClCompile Include="src\TextureArray.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\tests\TestStaticBatch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\shaders\NoProjVertex.glsl" />
@@ -1418,6 +1421,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\TextureArray.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tests\TestStaticBatch.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
