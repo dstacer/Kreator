@@ -55,8 +55,14 @@ int main(void)
     std::cout << glGetString(GL_VENDOR) << " " << glGetString(GL_RENDERER) << " "
         << glGetString(GL_VERSION) << " " << glGetString(GL_SHADING_LANGUAGE_VERSION)
         << std::endl;
-    
-    
+
+    /* This scope forces any stack-allocated objects created below that may have
+    *  OpenGL code in them to be destroyed before the glfw context is terminated, ensuring
+    *  the GL code (in particular glGetError, which is called in a loop) will be finished
+    *  executing.
+    */
+    { 
+        
         test::Test* currentTest(nullptr);
         test::TestMenu* testMenu = new test::TestMenu(currentTest);
         currentTest = testMenu;
@@ -75,7 +81,6 @@ int main(void)
         /* Loop until the user closes the window */
         while (!glfwWindowShouldClose(window))
         {
-            /* Render here */
             Renderer rend;
             rend.SetClearColor({ 0.2f, 0.2f, 0.2f, 1.0f });
             rend.Clear();
@@ -99,19 +104,21 @@ int main(void)
             }
 
             ImGui::Render();
-            
+
             ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-            /* Swap front and back buffers */
             glfwSwapBuffers(window);
 
-            /* Poll for and process events */
             glfwPollEvents();
         }
-    
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
+
+        // Make sure any static data associated with a running test gets destroyed
+        delete currentTest;
+
+        ImGui_ImplOpenGL3_Shutdown();
+        ImGui_ImplGlfw_Shutdown();
+        ImGui::DestroyContext();
+    }
 
     glfwTerminate();
     return 0;
